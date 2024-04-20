@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: test
+  application:
+    name: CustomerManagementTest
+  h2:
+    console:
+      enabled: true
+    database:
+      cacheSize: 1024
+      cacheConcurrency: STRONG
+      caseSensitive: true
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.Oracle12cDialect
+      ddl-auto: update
+    show-sql: true
+
+# swagger
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+app:
+  standard-date-formatter: ${DEFAULT_DATE_APP:yyyy-MM-dd HH:mm:ss.SSS}
+
+datasource:
+  url: jdbc:h2:mem:olsoftwaredb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=Oracle
+  jdbc-url: jdbc:h2:mem:olsoftwaredb
+  username: GMLSoftware
+  password: 
+  type: com.zaxxer.hikari.HikariDataSource
+  driver-class-name: org.h2.Driver
+  #connection-test-query: SELECT 1 FROM DUAL
+  pool-name: pool-hikari-olsoftware-test
+  maximum-pool-size: 10
+  minimum-idle: 5
+  idle-timeout: 300000
+  connection-timeout: 30000
