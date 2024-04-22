@@ -1,5 +1,7 @@
 package com.gmlsoftware.rsql;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,6 +112,10 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                return Long.parseLong(arg);
             } else if (type.equals(Short.class)) {
                 return Short.parseShort(arg);
+             } else if (type.equals(java.util.Date.class)) {
+            	 return parseDate(arg);
+             } else if (type.equals(java.sql.Date.class)) {
+            	 return parseDate(parseDate(arg));
              } else {
                 return arg;
             }
@@ -130,5 +136,24 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
         }
 
         return join;
+    }
+
+    private java.util.Date parseDate(String dateString) {
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        try {
+            return dateFormat1.parse(dateString);
+        } catch (ParseException e1) {
+            try {
+                return dateFormat2.parse(dateString);
+            } catch (ParseException e2) {
+                throw new IllegalArgumentException("Invalid date format. Allowed formats: yyyy-MM-dd y yyyy-MM-dd HH:mm:ss.SSS");
+            }
+        }
+    }
+
+    private java.sql.Date parseDate(java.util.Date date) {
+    	return new java.sql.Date(date.getTime());
     }
 }

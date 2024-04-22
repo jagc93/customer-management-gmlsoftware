@@ -1,0 +1,63 @@
+<div>
+    <div class="w-100 height-progress-bar">
+        <div class="progress height-progress-bar" style="height: 5px">
+            <div *ngIf="showProgressBar" class="progress-bar bg-deep-sky-blue" role="progressbar"
+                [style.width.%]="loadProgressBar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <div *ngIf="!isOffcanvasOpen" class="p-4 bg-light" [ngClass]="{'mx-2': isOffcanvasOpen }">
+        <div class="logo" [class.container-shifted]="isOffcanvasOpen"></div>
+    </div>
+    <div class="d-sm-block d-md-flex" [class.container-shifted]="isOffcanvasOpen">
+        <div *ngIf="!isOffcanvasOpen">
+            <div class="ms-4 d-flex justify-content-left align-items-center">
+                <div class="client mb-2"></div>
+                <h4 class="mb-0 pl-2 text-deep-sky-blue">Clients</h4>
+            </div>
+            <button class="btn btn-sm arrow border" type="button" (click)="openOffcanvas()">
+                <img src="../../assets/images/right arrow.png" width="35" alt="rigth-arrow">
+            </button>
+        </div>
+        <div class="container container-fluid pt-4">
+            <div class="container-alert" *ngIf="alert.isSuccess || alert.isError">
+                <div class="alert alert-danger alert-dismissible fade show"
+                    [ngClass]="{ 'alert-danger': alert.isError, 'alert-success': alert.isSuccess }" role="alert">
+                    <i class="fa fa-exclamation-circle"></i> {{alert.message}}
+                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        (click)="alert.message = ''; alert.isError = false; alert.isSuccess = false;"></button>
+                </div>
+            </div>
+            <div [ngClass]="{'p-5': isOffcanvasOpen }">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header bg-light">
+        <div class="offcanvas-title" id="offcanvasExampleLabel">
+            <div class="m-4">
+                <div class="logo"></div>
+            </div>
+            <div class="ms-4 d-flex justify-content-left align-items-center">
+                <div class="client mb-2"></div>
+                <h4 class="mb-0 pl-2 text-deep-sky-blue">Clients</h4>
+            </div>
+        </div>
+        <button type="button" class="btn-close text-reset" (click)="closeOffcanvas()" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action cursor-pointer" routerLinkActive='active'
+                [routerLink]="['/clients']">Clients</li>
+            <li class="list-group-item list-group-item-action cursor-pointer" routerLinkActive='active'
+                [routerLink]="['/client-look-history']" disabled>Client look history</li>
+            <li class="list-group-item list-group-item-action cursor-pointer" routerLinkActive='active'
+                [routerLink]="['/emergency-pin-configuration']" disabled>Emergency PIN configuration</li>
+            <li class="list-group-item list-group-item-action cursor-pointer" routerLinkActive='active'
+                [routerLink]="['emergency-pin-history']" disabled>Emergency PIN history</li>
+        </ul>
+    </div>
+</div>

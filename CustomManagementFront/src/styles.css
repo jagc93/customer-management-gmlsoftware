@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+
+.text-deep-sky-blue {
+    --bs-text-opacity: 1;
+    color: rgb(0 161 224) !important;
+}
+
+.bg-deep-sky-blue {
+    --bs-bg-opacity: 1;
+    background-color: rgb(0 160 223) !important;
+}
+
+.btn:hover.bg-deep-sky-blue {
+    background-color: rgb(0 134 187) !important;
+}
+
+.bg-form {
+    --bs-text-opacity: 1;
+    background-color: rgb(127 208 239) !important;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: var(--bs-list-group-active-color);
+    background-color: #00a0df;
+    border-color: #00a0df;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}

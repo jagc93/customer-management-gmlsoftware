@@ -1,0 +1,181 @@
+<div id="client-container" class="position-relative">
+    <div class="pt-4 pt-md-2">
+        <button class="btn bg-deep-sky-blue py-2 px-3 me-4" (click)="showMainForm();">
+            <fa-icon icon="plus" class="me-2 small text-secondary"></fa-icon> <span class="text-white">New</span>
+        </button>
+        <button class="btn bg-deep-sky-blue py-2 px-3">
+            <fa-icon icon="file-export" class="me-2 small text-secondary"></fa-icon> <span
+                class="text-white">Export</span>
+        </button>
+    </div>
+    <div *ngIf="formFilter" class="pt-4 d-block d-sm-flex justify-content-center p-12">
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4">
+            <form class="small" [formGroup]="formFilter" novalidate>
+                <div class="input-group mb-3 px-3">
+                    <input class="form-control form-control-sm rounded-start-5" formControlName="sharedKeyFilter"
+                        type="text" placeholder="Enter shared key">
+                    <button class="input-group-text rounded-end-5 bg-white text-secondary" id="search">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 px-3 ps-sm-3">
+            <button *ngIf="!showFormFilter" class="btn bg-deep-sky-blue col-12" (click)="advancedSearch();">
+                <span class="text-white">Advanced Search</span>
+            </button>
+        </div>
+        <div class="d-none d-md-flex col-md-2 col-lg-4"></div>
+    </div>
+
+    <div *ngIf="formFilter && showFormFilter" class="col-12 fadeIn">
+        <div class="col-12 col-md-8 col-lg-7 border rounded-2 p-4 bg-form text-secondary">
+            <form class="form-row small" [formGroup]="formFilter" novalidate>
+                <div class="mb-3 row">
+                    <label for="nameFilter" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="nameFilter" formControlName="nameFilter"
+                            autocomplete="off">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="phoneNumberFilter" class="col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="phoneNumberFilter"
+                            formControlName="phoneNumberFilter" autocomplete="off">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="emailAddressFilter" class="col-sm-2 col-form-label">E-mail</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="emailAddressFilter"
+                            formControlName="emailAddressFilter" autocomplete="off">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="startDateFilter" class="col-sm-2 col-form-label">Start date</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="startDateFilter" formControlName="startDateFilter">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="endDateFilter" class="col-sm-2 col-form-label">End date</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="endDateFilter" formControlName="endDateFilter">
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex justify-content-end">
+                <button class="btn bg-deep-sky-blue px-5 text-white" (click)="showFormFilter = false;"
+                    id="advanced-search">Ok</button>
+            </div>
+        </div>
+        <div class="d-none d-md-flex col-md-4 col-lg-5"></div>
+    </div>
+
+    <div class="mt-5 table-responsive">
+        <h4 class="mb-3 pl-2 text-deep-sky-blue">Clients</h4>
+
+        <table class="table table-sm table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Shared Key</th>
+                    <th>Business ID</th>
+                    <th>E-mail</th>
+                    <th>Phone</th>
+                    <th>Data Added</th>
+                    <th class="d-flex justify-content-center">
+                        <div class="edit"></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let client of clients | paginate: { itemsPerPage: itemsPerPage, currentPage: page, totalItems: pageTotalItems, id: 'paginate' }">
+                    <td>{{ client.sharedKey }}</td>
+                    <td>{{ getFullName(client) }}</td>
+                    <td>{{ client.emailAddress }}</td>
+                    <td>{{ client.phoneNumber }}</td>
+                    <td>{{ client.creationDate | date: 'dd/MM/yyyy' }}</td>
+                    <td style="width: 25px;">
+                        <button class="btn rounded-circle" (click)="select(client);">
+                            <fa-icon icon="pen" class="small"></fa-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="!clients || clients.length === 0">
+                    <td colspan="6">
+                        <h4 class="text-center text-secondary my-3">{{ 'No data to display' | uppercase }} </h4>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination-controls id="paginate" [responsive]="true" class="text-center" (pageChange)="runChangePage($event)"
+            [autoHide]="true" previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page" style="font-size: 12px; margin: auto;"></pagination-controls>
+    </div>
+
+    <div *ngIf="form && showForm" id="create-form-container" class="p-3 p-sm-5">
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn-close text-reset" (click)="showForm = false; resetFormFields();"
+                aria-label="Close"></button>
+        </div>
+        <div class="col-12 d-flex justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 border rounded-2 p-4 bg-form text-secondary">
+                <h1>{{ buttons.isRegister ? 'Create new' : 'Update'}} client</h1>
+                <hr>
+                <form class="form-row small g-3 needs-validation" [formGroup]="form" novalidate>
+                    <div class="mb-3 row">
+                        <label for="name" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name"
+                                [ngClass]="{ 'is-invalid': form.get('name')?.touched && !form.get('name')?.valid }"
+                                formControlName="name" autocomplete="off" onpaste="return false;">
+                            <div *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched"
+                                class="invalid-feedback">
+                                Required field
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="phoneNumber" class="col-sm-2 col-form-label">Phone</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber"
+                                autocomplete="off" onpaste="return false;">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="emailAddress" class="col-sm-2 col-form-label">E-mail</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="emailAddress"
+                                [ngClass]="{ 'is-invalid': form.get('emailAddress')?.touched && !form.get('emailAddress')?.valid }"
+                                formControlName="emailAddress" autocomplete="off" onpaste="return false;">
+                            <div *ngIf="form.get('emailAddress')?.errors?.['isValidEmail'] == false && form.get('emailAddress')?.touched == true"
+                                class="invalid-feedback">
+                                Email is NOT valid
+                            </div>
+                            <div *ngIf="form.get('emailAddress')?.errors?.['required'] && form.get('emailAddress')?.touched"
+                                class="invalid-feedback">
+                                Required field
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="startDate" class="col-sm-2 col-form-label">Start date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="startDate" formControlName="startDate">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="endDate" class="col-sm-2 col-form-label">End date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="endDate" formControlName="endDate">
+                        </div>
+                    </div>
+                </form>
+                <div class="d-flex justify-content-end">
+                    <button class="btn bg-deep-sky-blue px-5 text-white" (click)="verifyForm()"
+                    [disabled]="buttons.isEdit && !buttons.updateButtonIsEnabled || buttons.isRegister && !buttons.registrationButtonIsEnabled">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

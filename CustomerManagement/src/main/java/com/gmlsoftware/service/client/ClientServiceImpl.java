@@ -78,6 +78,7 @@ public class ClientServiceImpl
 		validateFieldsUnique(request, id);
 
 		Client client = super.findById(id).orElseThrow(() -> getNotFound(id, TABLE_NAME));
+		mapper.updateFromRequest(request, client);
 		client.setSharedKey(getSharedKey(client));
 
 		return super.update(client);

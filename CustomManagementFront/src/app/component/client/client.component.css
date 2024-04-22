@@ -1,0 +1,33 @@
+.edit {
+    background-image: url('/assets/images/icon-edit.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+}
+
+#create-form-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    background-color: rgba(128, 128, 128, .5);
+    animation: fadeIn 0.5s ease-in-out;
+    z-index: 999;
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
