@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, firstValueFrom, fromEvent, Subject, Subscription, takeUntil } from 'rxjs';
+import { debounceTime, firstValueFrom, fromEvent, Subject, Subscription, takeLast, takeUntil } from 'rxjs';
 import { ClientDto } from '../../model/client/client-dto';
 import { ClientService } from '../../service/client/client.service';
 import { ClientRequest } from '../../model/client/client-request';
@@ -8,6 +8,7 @@ import { CharactersAllowed, CheckEmail } from '../../functions/app.function';
 import { ProgressBarService } from '../../service/progress-bar/progress-bar.service';
 import { AlertService } from '../../service/aler/alert.service';
 import { OffcanvasService } from '../../service/offcanvas/offcanvas.service';
+import { ExportService } from '../../service/export/export.service';
 
 @Component({
   selector: 'app-client',
@@ -45,8 +46,32 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
     private service: ClientService,
     private progressBarService: ProgressBarService,
     private alertService: AlertService,
-    private offcanvasService: OffcanvasService
+    private offcanvasService: OffcanvasService,
+    private exportService: ExportService
   ) { }
+
+  private export(): void {
+    const btnExport = document.getElementById('file-export');
+
+    if (btnExport) {
+      fromEvent(btnExport, 'click').pipe(
+        debounceTime(300)
+      ).subscribe(() => {
+        if (this.clients) {
+          this.progressBarService.show();
+          const data = [
+            Object.keys(this.clients[0]),
+            ...this.clients.map(client => Object.values(client))
+          ];
+          console.log(62, JSON.stringify(data));
+          this.exportService.exportToCsv(data, 'export-client');
+          setTimeout(() => {
+            this.progressBarService.hide();
+          }, 300);
+        }
+      });
+    }
+  }
 
   private async create(request: ClientRequest): Promise<void> {
     try {
@@ -570,6 +595,7 @@ export class ClientComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this.search();
+    this.export();
   }
 
   public ngOnDestroy(): void {

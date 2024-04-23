@@ -8,8 +8,8 @@ import { PageResponse } from '../model/PageResponse';
  */
 export class GenericService<D, R, ID> {
 
-    private uri = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}`;
-    // private uri = 'http://localhost:8081';
+    // private uri = `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}`;
+    private uri = 'http://localhost:8081';
     protected context!: string;
     protected http!: HttpClient;
 

@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProgressBarService } from './service/progress-bar/progress-bar.service';
 import { AlertService } from './service/aler/alert.service';
 import { OffcanvasService } from './service/offcanvas/offcanvas.service';
+import { ExportService } from './service/export/export.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { OffcanvasService } from './service/offcanvas/offcanvas.service';
     ClientService,
     ProgressBarService,
     AlertService,
-    OffcanvasService
+    OffcanvasService,
+    ExportService
   ],
   bootstrap: [AppComponent]
 })
